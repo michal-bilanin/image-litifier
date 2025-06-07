@@ -72,7 +72,7 @@ public class ImagesController : ControllerBase
             processingRequest,
             _serviceBusQueueName);
 
-        var statusUrl = $"https://{Request.Host}/api/Images/status/{requestId}";
+        var statusUrl = Url.Action("GetStatus", "Images", new { requestId }, Request.Scheme);
 
         return Accepted(new
         {
