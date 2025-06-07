@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageLitifier.WebApp", "Ima
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageLitifier.Contracts", "ImageLitifier.Contracts\ImageLitifier.Contracts.csproj", "{6A5C8FB4-776E-4A07-8183-83BD7F76FF77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageLitifier.ImageProcessor", "ImageLitifier.ImageProcessor\ImageLitifier.ImageProcessor.csproj", "{235547C2-877C-44B7-B120-3D8386079225}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{6A5C8FB4-776E-4A07-8183-83BD7F76FF77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A5C8FB4-776E-4A07-8183-83BD7F76FF77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A5C8FB4-776E-4A07-8183-83BD7F76FF77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{235547C2-877C-44B7-B120-3D8386079225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{235547C2-877C-44B7-B120-3D8386079225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{235547C2-877C-44B7-B120-3D8386079225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{235547C2-877C-44B7-B120-3D8386079225}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
