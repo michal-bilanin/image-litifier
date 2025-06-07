@@ -34,4 +34,9 @@
   <ItemGroup>
     <ProjectReference Include="..\ImageLitifier.Contracts\ImageLitifier.Contracts.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\flame.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
