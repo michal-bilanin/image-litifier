@@ -23,12 +23,15 @@ public class ImagesController : ControllerBase
     private readonly string _serviceBusQueueName =
         Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.ServiceBusQueueName)
         ?? throw new InvalidOperationException("SERVICE_BUS_QUEUE_NAME environment variable is not set.");
-    
+
     public ImagesController(IBlobsManagement blobsManagement, IAzureServiceBus serviceBus)
     {
         _blobsManagement = blobsManagement;
         _serviceBus = serviceBus;
     }
+
+    private static string ProcessedImageFileName(string requestId) =>
+        $"{requestId}.gif";
 
     [HttpPost]
     [Route("upload")]
@@ -49,10 +52,9 @@ public class ImagesController : ControllerBase
             imageBytes = memoryStream.ToArray();
         }
 
-        var fileName = $"{requestId}_{imageFile.FileName}";
         var imageUrlResult = await _blobsManagement.UploadFile(
             _imageRequestsContainerName,
-            fileName,
+            ProcessedImageFileName(requestId),
             imageBytes);
 
         if (imageUrlResult.IsError)
@@ -65,7 +67,7 @@ public class ImagesController : ControllerBase
         {
             RequestId = requestId,
             SourceImageUrl = imageUrlResult.Value,
-            FileName = fileName,
+            FileName = ProcessedImageFileName(requestId),
             ProcessingType = "FlameGif",
         };
 
@@ -88,8 +90,7 @@ public class ImagesController : ControllerBase
     public async Task<IActionResult> GetStatus(string requestId)
     {
         var processedImageExistsResponse = await _blobsManagement.FileExists(
-            _imageProcessedContainerName,
-            $"{requestId}_flames.gif");
+            _imageProcessedContainerName, ProcessedImageFileName(requestId));
 
         if (processedImageExistsResponse.IsError)
         {
@@ -107,8 +108,7 @@ public class ImagesController : ControllerBase
         }
 
         var imageUrlResponse = await _blobsManagement.GetFileUrl(
-            _imageProcessedContainerName,
-            $"{requestId}_flames.gif");
+            _imageProcessedContainerName, ProcessedImageFileName(requestId));
 
         if (imageUrlResponse.IsError)
         {
