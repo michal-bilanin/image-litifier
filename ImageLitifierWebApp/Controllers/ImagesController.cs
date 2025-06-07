@@ -24,6 +24,12 @@ public class ImagesController : ControllerBase
         Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.ServiceBusQueueName)
         ?? throw new InvalidOperationException("SERVICE_BUS_QUEUE_NAME environment variable is not set.");
     
+    public ImagesController(IBlobsManagement blobsManagement, IAzureServiceBus serviceBus)
+    {
+        _blobsManagement = blobsManagement;
+        _serviceBus = serviceBus;
+    }
+
     [HttpPost]
     [Route("upload")]
     public async Task<IActionResult> UploadImage(IFormFile imageFile)
