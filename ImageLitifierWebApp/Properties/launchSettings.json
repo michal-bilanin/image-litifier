@@ -16,7 +16,12 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5156",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "BLOB_STORAGE_CONNECTION_STRING": "UseDevelopmentStorage=true",
+        "BLOB_STORAGE_REQUESTS_CONTAINER_NAME": "image-requests",
+        "BLOB_STORAGE_RESPONSES_CONTAINER_NAME": "image-responses",
+        "SERVICE_BUS_CONNECTION_STRING": "Endpoint=sb://localhost:9350/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=your_shared_access_key",
+        "SERVICE_BUS_QUEUE_NAME": "image-requests"
       }
     },
     "https": {
@@ -26,7 +31,12 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7252;http://localhost:5156",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "BLOB_STORAGE_CONNECTION_STRING": "UseDevelopmentStorage=true",
+        "BLOB_STORAGE_REQUESTS_CONTAINER_NAME": "image-requests",
+        "BLOB_STORAGE_RESPONSES_CONTAINER_NAME": "image-responses",
+        "SERVICE_BUS_CONNECTION_STRING": "Endpoint=sb://localhost:9350/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=your_shared_access_key",
+        "SERVICE_BUS_QUEUE_NAME": "image-requests"
       }
     },
     "IIS Express": {
@@ -34,7 +44,12 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "BLOB_STORAGE_CONNECTION_STRING": "UseDevelopmentStorage=true",
+        "BLOB_STORAGE_REQUESTS_CONTAINER_NAME": "image-requests",
+        "BLOB_STORAGE_RESPONSES_CONTAINER_NAME": "image-responses",
+        "SERVICE_BUS_CONNECTION_STRING": "Endpoint=sb://localhost:9350/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=your_shared_access_key",
+        "SERVICE_BUS_QUEUE_NAME": "image-requests"
       }
     }
   }
