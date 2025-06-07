@@ -1,0 +1,6 @@
+@ImageLitifierWebApp_HostAddress = http://localhost:5156
+
+GET {{ImageLitifierWebApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
