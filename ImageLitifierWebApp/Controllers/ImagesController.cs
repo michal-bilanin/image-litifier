@@ -1,4 +1,5 @@
-﻿using ImageLitifier.WebApp.Services;
+﻿using ImageLitifier.Contracts;
+using ImageLitifier.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ImageLitifier.WebApp.Controllers;
@@ -7,7 +8,6 @@ namespace ImageLitifier.WebApp.Controllers;
 [Route("[controller]")]
 public class ImagesController : ControllerBase
 {
-    private readonly IConfiguration _configuration;
     private readonly IBlobsManagement _blobsManagement;
     private readonly IAzureServiceBus _serviceBus;
 
@@ -20,6 +20,10 @@ public class ImagesController : ControllerBase
         ?? throw new InvalidOperationException(
             "BLOB_STORAGE_PROCESSED_CONTAINER_NAME environment variable is not set.");
 
+    private readonly string _serviceBusQueueName =
+        Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.ServiceBusQueueName)
+        ?? throw new InvalidOperationException("SERVICE_BUS_QUEUE_NAME environment variable is not set.");
+    
     [HttpPost]
     [Route("upload")]
     public async Task<IActionResult> UploadImage(IFormFile imageFile)
@@ -50,21 +54,17 @@ public class ImagesController : ControllerBase
                 "Failed to upload image to blob storage: " + imageUrlResult.FirstError);
         }
 
-        // Create processing request
         var processingRequest = new ImageProcessingRequest
         {
             RequestId = requestId,
-            SourceImageUrl = imageUrl,
+            SourceImageUrl = imageUrlResult.Value,
             FileName = imageFile.FileName,
             ProcessingType = "FlameGif",
-            SubmittedAt = DateTime.UtcNow
         };
 
-        // Send to Service Bus
         await _serviceBus.SendMessageAsync(
             processingRequest,
-            "image-processing-queue",
-            _configuration.GetConnectionString("ServiceBus"));
+            _serviceBusQueueName);
 
         var statusUrl = $"https://{Request.Host}/api/Images/status/{requestId}";
 
