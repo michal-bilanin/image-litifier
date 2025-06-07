@@ -49,9 +49,10 @@ public class ImagesController : ControllerBase
             imageBytes = memoryStream.ToArray();
         }
 
+        var fileName = $"{requestId}_{imageFile.FileName}";
         var imageUrlResult = await _blobsManagement.UploadFile(
             _imageRequestsContainerName,
-            $"{requestId}_{imageFile.FileName}",
+            fileName,
             imageBytes);
 
         if (imageUrlResult.IsError)
@@ -64,7 +65,7 @@ public class ImagesController : ControllerBase
         {
             RequestId = requestId,
             SourceImageUrl = imageUrlResult.Value,
-            FileName = imageFile.FileName,
+            FileName = fileName,
             ProcessingType = "FlameGif",
         };
 
