@@ -6,13 +6,8 @@ using ErrorOr;
 
 public class BlobsManagement : IBlobsManagement
 {
-    private readonly string _connectionString;
-
-    public BlobsManagement()
-    {
-        _connectionString = Environment.GetEnvironmentVariable("BLOB_STORAGE_CONNECTION_STRING")
-            ?? throw new InvalidOperationException("BLOB_STORAGE_CONNECTION_STRING environment variable is not set.");
-    }
+    private readonly string _connectionString = Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.BlobStorageConnectionString)
+        ?? throw new InvalidOperationException("BLOB_STORAGE_CONNECTION_STRING environment variable is not set.");
 
     public async Task<ErrorOr<string>> UploadFile(string containerName, string fileName, byte[] file)
     {

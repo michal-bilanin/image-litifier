@@ -14,11 +14,6 @@ namespace ImageLitifier.ImageProcessor
         private readonly IImageProcessingService _imageProcessingService;
         private readonly IBlobsManagement _blobsManagement;
 
-        private readonly string _imageRequestsContainerName =
-            Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.BlobStorageRequestsContainerName)
-            ?? throw new InvalidOperationException(
-                "BLOB_STORAGE_REQUESTS_CONTAINER_NAME environment variable is not set.");
-
         private readonly string _imageProcessedContainerName =
             Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.BlobStorageProcessedContainerName)
             ?? throw new InvalidOperationException(
