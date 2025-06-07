@@ -6,20 +6,17 @@ namespace ImageLitifier.WebApp.Services;
 public class BlobsManagement : IBlobsManagement
 {
     private readonly string _connectionString;
-    private readonly string _containerName;
 
     public BlobsManagement()
     {
         _connectionString = Environment.GetEnvironmentVariable("BLOB_STORAGE_CONNECTION_STRING")
             ?? throw new InvalidOperationException("BLOB_STORAGE_CONNECTION_STRING environment variable is not set.");
-        _containerName = Environment.GetEnvironmentVariable("BLOB_STORAGE_CONTAINER_NAME")
-            ?? throw new InvalidOperationException("BLOB_STORAGE_CONTAINER_NAME environment variable is not set.");
     }
 
-    public async Task<ErrorOr<string>> UploadFile(string fileName, byte[] file)
+    public async Task<ErrorOr<string>> UploadFile(string containerName, string fileName, byte[] file)
     {
         var blobServiceClient = new BlobServiceClient(_connectionString);
-        var blobContainerClient = blobServiceClient.GetBlobContainerClient(_containerName);
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
         await blobContainerClient.CreateIfNotExistsAsync();
         var blobClient = blobContainerClient.GetBlobClient(fileName);
@@ -37,10 +34,10 @@ public class BlobsManagement : IBlobsManagement
         return blobClient.Uri.ToString();
     }
 
-    public async Task<ErrorOr<bool>> FileExists(string fileName)
+    public async Task<ErrorOr<bool>> FileExists(string containerName, string fileName)
     {
         var blobServiceClient = new BlobServiceClient(_connectionString);
-        var blobContainerClient = blobServiceClient.GetBlobContainerClient(_containerName);
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
         var blobClient = blobContainerClient.GetBlobClient(fileName);
 
         try
@@ -53,10 +50,10 @@ public class BlobsManagement : IBlobsManagement
         }
     }
 
-    public async Task<ErrorOr<string>> GetFileUrl(string fileName)
+    public async Task<ErrorOr<string>> GetFileUrl(string containerName, string fileName)
     {
         var blobServiceClient = new BlobServiceClient(_connectionString);
-        var blobContainerClient = blobServiceClient.GetBlobContainerClient(_containerName);
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
         var blobClient = blobContainerClient.GetBlobClient(fileName);
 
         if (!await blobClient.ExistsAsync())

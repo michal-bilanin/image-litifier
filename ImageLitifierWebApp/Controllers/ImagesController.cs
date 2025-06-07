@@ -11,15 +11,25 @@ public class ImagesController : ControllerBase
     private readonly IBlobsManagement _blobsManagement;
     private readonly IAzureServiceBus _serviceBus;
 
+    private readonly string _imageRequestsContainerName =
+        Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.BlobStorageRequestsContainerName)
+        ?? throw new InvalidOperationException("BLOB_STORAGE_REQUESTS_CONTAINER_NAME environment variable is not set.");
+
+    private readonly string _imageProcessedContainerName =
+        Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.BlobStorageProcessedContainerName)
+        ?? throw new InvalidOperationException(
+            "BLOB_STORAGE_PROCESSED_CONTAINER_NAME environment variable is not set.");
+
     [HttpPost]
     [Route("upload")]
     public async Task<IActionResult> UploadImage(IFormFile imageFile)
     {
-        if (imageFile == null || imageFile.Length == 0)
+        if (imageFile.Length == 0)
+        {
             return BadRequest("No image provided");
+        }
 
         var requestId = Guid.NewGuid().ToString();
-        const string containerName = "source-images";
 
         // Upload to blob storage
         byte[] imageBytes;
@@ -29,11 +39,16 @@ public class ImagesController : ControllerBase
             imageBytes = memoryStream.ToArray();
         }
 
-        string imageUrl = await _blobsManagement.UploadFile(
-            containerName,
+        var imageUrlResult = await _blobsManagement.UploadFile(
+            _imageRequestsContainerName,
             $"{requestId}_{imageFile.FileName}",
-            imageBytes,
-            _configuration.GetConnectionString("BlobStorage"));
+            imageBytes);
+
+        if (imageUrlResult.IsError)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                "Failed to upload image to blob storage: " + imageUrlResult.FirstError);
+        }
 
         // Create processing request
         var processingRequest = new ImageProcessingRequest
@@ -65,12 +80,17 @@ public class ImagesController : ControllerBase
     [Route("status/{requestId}")]
     public async Task<IActionResult> GetStatus(string requestId)
     {
-        // Check if processed image exists in blob storage
-        var processedImageExists = await _blobsManagement.FileExists(
-            "processed-images",
+        var processedImageExistsResponse = await _blobsManagement.FileExists(
+            _imageProcessedContainerName,
             $"{requestId}_flames.gif");
 
-        if (!processedImageExists)
+        if (processedImageExistsResponse.IsError)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                "Failed to check processed image existence: " + processedImageExistsResponse.FirstError);
+        }
+
+        if (!processedImageExistsResponse.Value)
         {
             return Ok(new
             {
@@ -79,15 +99,20 @@ public class ImagesController : ControllerBase
             });
         }
 
-
-        string imageUrl = await _blobsManagement.GetFileUrl(
-            "processed-images",
+        var imageUrlResponse = await _blobsManagement.GetFileUrl(
+            _imageProcessedContainerName,
             $"{requestId}_flames.gif");
+
+        if (imageUrlResponse.IsError)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                "Failed to retrieve processed image URL: " + imageUrlResponse.FirstError);
+        }
 
         return Ok(new
         {
             Status = "Completed",
-            ResultUrl = imageUrl
+            ResultUrl = imageUrlResponse.Value
         });
     }
 }
