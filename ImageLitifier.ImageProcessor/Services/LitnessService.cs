@@ -60,49 +60,61 @@ public class LitnessService : IImageProcessingService
     {
         using var sourceImage = Image.Load<Rgba32>(sourceImageBytes);
         using var flameGif = await Image.LoadAsync<Rgba32>("assets/flame.gif");
+        Image<Rgba32> outputGif = null;
 
-        using var outputGif = new Image<Rgba32>(sourceImage.Width, sourceImage.Height);
-
-        var gifMetadata = outputGif.Metadata.GetGifMetadata();
-        gifMetadata.RepeatCount = 0; // Infinite loop
-
-        outputGif.Frames.RemoveFrame(0);
-
-        for (int frameIndex = 0; frameIndex < flameGif.Frames.Count; frameIndex++)
+        try
         {
-            using var combinedFrame = sourceImage.CloneAs<Rgba32>();
-            var flameFrame = flameGif.Frames[frameIndex];
-            using var flameFrameImage = new Image<Rgba32>(flameFrame.Width, flameFrame.Height);
-
-            for (int y = 0; y < flameFrame.Height; y++)
+            for (int frameIndex = 0; frameIndex < flameGif.Frames.Count; frameIndex++)
             {
-                for (int x = 0; x < flameFrame.Width; x++)
+                using var combinedFrame = sourceImage.CloneAs<Rgba32>();
+                var flameFrame = flameGif.Frames[frameIndex];
+                using var flameFrameImage = new Image<Rgba32>(flameFrame.Width, flameFrame.Height);
+
+                for (int y = 0; y < flameFrame.Height; y++)
                 {
-                    flameFrameImage[x, y] = flameFrame[x, y];
+                    for (int x = 0; x < flameFrame.Width; x++)
+                    {
+                        flameFrameImage[x, y] = flameFrame[x, y];
+                    }
+                }
+
+                if (flameFrameImage.Width != sourceImage.Width || flameFrameImage.Height != sourceImage.Height)
+                {
+                    flameFrameImage.Mutate(ctx => ctx.Resize(sourceImage.Width, sourceImage.Height));
+                }
+
+                combinedFrame.Mutate(ctx => ctx.DrawImage(flameFrameImage, new Point(0, 0), 1.0f));
+
+                var originalFrameMetadata = flameFrame.Metadata.GetGifMetadata();
+                var frameDelay = originalFrameMetadata.FrameDelay > 0 ? originalFrameMetadata.FrameDelay : 10;
+                var frameMetadata = combinedFrame.Frames.RootFrame.Metadata.GetGifMetadata();
+                frameMetadata.FrameDelay = frameDelay;
+
+                if (frameIndex == 0)
+                {
+                    outputGif = combinedFrame.CloneAs<Rgba32>();
+
+                    var gifMetadata = outputGif.Metadata.GetGifMetadata();
+                    gifMetadata.RepeatCount = 0; // Infinite loop
+                }
+                else
+                {
+                    outputGif?.Frames.AddFrame(combinedFrame.Frames.RootFrame);
                 }
             }
 
-            if (flameFrameImage.Width != sourceImage.Width || flameFrameImage.Height != sourceImage.Height)
+            using var memoryStream = new MemoryStream();
+            await outputGif.SaveAsGifAsync(memoryStream, new GifEncoder
             {
-                flameFrameImage.Mutate(ctx => ctx.Resize(sourceImage.Width, sourceImage.Height));
-            }
+                ColorTableMode = GifColorTableMode.Local,
+                Quantizer = new OctreeQuantizer(new QuantizerOptions { MaxColors = 256 })
+            });
 
-            combinedFrame.Mutate(ctx => ctx.DrawImage(flameFrameImage, new Point(0, 0), 1.0f));
-
-            var frameMetadata = combinedFrame.Frames.RootFrame.Metadata.GetGifMetadata();
-            var originalFrameMetadata = flameFrame.Metadata.GetGifMetadata();
-            frameMetadata.FrameDelay = originalFrameMetadata.FrameDelay > 0 ? originalFrameMetadata.FrameDelay : 10;
-
-            outputGif.Frames.AddFrame(combinedFrame.Frames.RootFrame);
+            return memoryStream.ToArray();
         }
-
-        using var memoryStream = new MemoryStream();
-        await outputGif.SaveAsGifAsync(memoryStream, new GifEncoder
+        finally
         {
-            ColorTableMode = GifColorTableMode.Global,
-            Quantizer = new OctreeQuantizer(new QuantizerOptions { MaxColors = 256 })
-        });
-
-        return memoryStream.ToArray();
+            outputGif?.Dispose();
+        }
     }
 }
