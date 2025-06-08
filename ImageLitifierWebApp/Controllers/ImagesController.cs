@@ -42,6 +42,12 @@ public class ImagesController : ControllerBase
             return BadRequest("No image provided");
         }
 
+        const long maxFileSize = 10 * 1024 * 1024;
+        if (imageFile.Length > maxFileSize)
+        {
+            return BadRequest("Image size exceeds the 10MB limit");
+        }
+
         var requestId = Guid.NewGuid().ToString();
 
         // Upload to blob storage
