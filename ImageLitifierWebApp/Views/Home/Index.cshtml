@@ -1,5 +1,8 @@
-﻿@{
+﻿@using ImageLitifier.WebApp
+@{
     ViewData["Title"] = "Image Litifier - Flame GIF Creator";
+    var backgroundMusicUrl = Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.BackgroundMusicUrl) 
+                             ?? Url.Content("~/audio/background-beat.mp3");
 }
 
 <link rel="stylesheet" href="~/css/hip-hop-style.css">
@@ -7,7 +10,7 @@
 <div class="hip-hop-container">
     <!-- Background music -->
     <audio id="backgroundMusic" loop>
-        <source src="~/audio/background-beat.mp3" type="audio/mpeg">
+        <source src="@backgroundMusicUrl" type="audio/mpeg">
     </audio>
 
     <!-- Sound effects -->
