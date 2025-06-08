@@ -2,6 +2,8 @@
 
 ImageLitifier is a cloud-based image processing application that processes images by overlaying a flame GIF effect. It uses Azure Service Bus for message queuing, Azure Blob Storage for file management, and the `ImageSharp` library for image manipulation.
 
+![Image Litifier](ImageLitifierWebApp/wwwroot/images/hip-hop-background.jpg)
+
 ## Features
 
 - Processes images by applying a flame GIF effect.
