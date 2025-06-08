@@ -19,6 +19,11 @@ namespace ImageLitifier.ImageProcessor
             ?? throw new InvalidOperationException(
                 "BLOB_STORAGE_PROCESSED_CONTAINER_NAME environment variable is not set.");
 
+        private readonly string _imageRequestsContainerName =
+            Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.BlobStorageRequestsContainerName)
+            ?? throw new InvalidOperationException(
+                "BLOB_STORAGE_REQUESTS_CONTAINER_NAME environment variable is not set.");
+
         public ProcessImage(ILogger<ProcessImage> logger,
             HttpClient httpClient,
             IImageProcessingService imageProcessingService,
@@ -58,6 +63,7 @@ namespace ImageLitifier.ImageProcessor
                 if (processedImageBytesResult.IsError)
                 {
                     _logger.LogError($"Image processing failed: {processedImageBytesResult.FirstError}");
+                    await _blobsManagement.RemoveFile(_imageRequestsContainerName, request.FileName);
                     return;
                 }
 

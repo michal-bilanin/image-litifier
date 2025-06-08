@@ -29,4 +29,22 @@ public class BlobsManagement : IBlobsManagement
 
         return blobClient.Uri.ToString();
     }
+
+    public async Task<ErrorOr<Success>> RemoveFile(string containerName, string fileName)
+    {
+        var blobServiceClient = new BlobServiceClient(_connectionString);
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
+        var blobClient = blobContainerClient.GetBlobClient(fileName);
+
+        try
+        {
+            return await blobClient.DeleteIfExistsAsync()
+                ? new Success()
+                : Error.Failure(description: "File does not exist.");
+        }
+        catch (Exception ex)
+        {
+            return Error.Failure(description: $"Failed to delete file: {ex.Message}");
+        }
+    }
 }
