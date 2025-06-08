@@ -11,8 +11,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IBlobsManagement, BlobsManagement>();
 builder.Services.AddScoped<IAzureServiceBus, AzureServiceBus>();
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
