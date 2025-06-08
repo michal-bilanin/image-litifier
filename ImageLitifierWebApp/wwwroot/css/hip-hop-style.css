@@ -1,0 +1,600 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Bungee:wght@400&family=Fredoka+One:wght@400&family=Orbitron:wght@400;700;900&display=swap');
+
+/* Background and main container */
+.hip-hop-container {
+    min-height: 100vh;
+    background-image: url('/images/hip-hop-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.hip-hop-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+    rgba(255, 0, 150, 0.1) 0%,
+    rgba(0, 255, 255, 0.1) 25%,
+    rgba(255, 255, 0, 0.1) 50%,
+    rgba(255, 0, 150, 0.1) 75%,
+    rgba(0, 255, 255, 0.1) 100%);
+    animation: colorShift 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes colorShift {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.3; }
+}
+
+/* Typography */
+.main-title {
+    font-family: 'Bungee', cursive;
+    font-size: 3.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    text-shadow:
+            0 0 10px #ff0096,
+            0 0 20px #ff0096,
+            0 0 30px #ff0096,
+            0 0 40px #ff0096;
+    background: linear-gradient(45deg, #ff0096, #00ffff, #ffff00, #ff0096);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.glow-text {
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { filter: brightness(1) drop-shadow(0 0 10px #ff0096); }
+    to { filter: brightness(1.2) drop-shadow(0 0 20px #00ffff); }
+}
+
+.subtitle {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.2rem;
+    text-align: center;
+    color: #ffff00;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+}
+
+/* Cards */
+.retro-card {
+    background: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(20, 20, 20, 0.95) 50%,
+    rgba(0, 0, 0, 0.9) 100%);
+    border: 3px solid #ff0096;
+    border-radius: 15px;
+    box-shadow:
+            0 0 20px rgba(255, 0, 150, 0.5),
+            inset 0 0 20px rgba(0, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.retro-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff0096, #00ffff, #ffff00, #ff0096);
+    background-size: 400% 400%;
+    border-radius: 15px;
+    z-index: -1;
+    animation: borderGlow 4s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.card-header {
+    background: linear-gradient(90deg, #ff0096, #00ffff);
+    border-bottom: 2px solid #ffff00;
+    padding: 1rem;
+    text-align: center;
+}
+
+.card-title {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    color: #000;
+    margin: 0;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* Form elements */
+.retro-label {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    color: #00ffff;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    margin-bottom: 0.5rem;
+}
+
+.retro-input {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #ffff00;
+    border-radius: 10px;
+    color: #fff;
+    padding: 0.75rem;
+    font-family: 'Orbitron', monospace;
+    transition: all 0.3s ease;
+}
+
+.retro-input:focus {
+    outline: none;
+    border-color: #ff0096;
+    box-shadow: 0 0 15px rgba(255, 0, 150, 0.6);
+    background: rgba(255, 0, 150, 0.1);
+}
+
+/* Buttons */
+.retro-btn {
+    font-family: 'Bungee', cursive;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.retro-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.retro-btn:hover::before {
+    left: 100%;
+}
+
+.primary-btn {
+    background: linear-gradient(45deg, #ff0096, #ff4500);
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 0, 150, 0.6);
+}
+
+.secondary-btn {
+    background: linear-gradient(45deg, #00ffff, #0080ff);
+    color: #000;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.secondary-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 255, 255, 0.6);
+}
+
+.danger-btn {
+    background: linear-gradient(45deg, #ff4500, #ff0000);
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.danger-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 69, 0, 0.6);
+}
+
+/* Processing animations */
+.retro-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left: 4px solid #ff0096;
+    border-right: 4px solid #00ffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.status-text {
+    font-family: 'Orbitron', monospace;
+    color: #ffff00;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.processing-subtitle {
+    font-family: 'Fredoka One', cursive;
+    color: #00ffff;
+    font-size: 0.9rem;
+}
+
+.retro-progress {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    height: 20px;
+    overflow: hidden;
+    border: 1px solid #ff0096;
+}
+
+.retro-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ff0096, #00ffff, #ffff00, #ff0096);
+    background-size: 200% 100%;
+    animation: progressFlow 2s linear infinite;
+}
+
+@keyframes progressFlow {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+/* Success and error states */
+.success-card {
+    border-color: #00ff00;
+}
+
+.success-title {
+    font-family: 'Bungee', cursive;
+    color: #00ff00;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.error-card {
+    border-color: #ff0000;
+}
+
+.error-title {
+    font-family: 'Orbitron', monospace;
+    color: #ff0000;
+    font-weight: 700;
+}
+
+.error-text {
+    color: #ffaaaa;
+    font-family: 'Fredoka One', cursive;
+}
+
+/* Music toggle button */
+.music-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid #ff0096;
+    background: linear-gradient(45deg, #000, #333);
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 0, 150, 0.5);
+}
+
+.music-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 0, 150, 0.8);
+}
+
+.music-toggle.playing {
+    animation: musicPulse 1s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .retro-btn {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+}
+
+/* Additional visual effects */
+.hip-hop-container::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+            radial-gradient(circle at 20% 80%, rgba(255, 0, 150, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(255, 255, 0, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+    animation: ambientGlow 10s ease-in-out infinite;
+}
+
+@keyframes ambientGlow {
+    0%, 100% { opacity: 0.3; }
+    33% { opacity: 0.6; }
+    66% { opacity: 0.4; }
+}
+
+/* Main container centering */
+.hip-hop-container {
+    min-height: 100vh;
+    background-image: url('/images/hip-hop-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container modifications for better centering */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Center the main content area */
+.row.justify-content-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+/* Card centering improvements */
+.retro-card {
+    background: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(20, 20, 20, 0.95) 50%,
+    rgba(0, 0, 0, 0.9) 100%);
+    border: 3px solid #ff0096;
+    border-radius: 15px;
+    box-shadow:
+            0 0 20px rgba(255, 0, 150, 0.5),
+            inset 0 0 20px rgba(0, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto 2rem auto;
+    max-width: 600px;
+}
+
+/* Center form elements */
+.card-body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Center form inputs */
+.mb-3 {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 1.5rem auto;
+}
+
+.retro-input {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #ffff00;
+    border-radius: 10px;
+    color: #fff;
+    padding: 0.75rem;
+    font-family: 'Orbitron', monospace;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+}
+
+/* Center buttons */
+.d-grid {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.retro-btn {
+    font-family: 'Bungee', cursive;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    margin: 0 auto;
+}
+
+.processing-card .card-body,
+.success-card .card-body,
+.error-card .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 200px;
+}
+
+.result-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.result-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+.retro-progress {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    height: 20px;
+    overflow: hidden;
+    border: 1px solid #ff0096;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.retro-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left: 4px solid #ff0096;
+    border-right: 4px solid #00ffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem auto;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem 0.5rem;
+    }
+
+    .retro-card {
+        margin: 0 1rem 2rem 1rem;
+        max-width: none;
+    }
+
+    .card-body {
+        padding: 1.5rem 1rem;
+    }
+
+    .main-title {
+        font-size: 2.5rem;
+        text-align: center;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .retro-btn {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .retro-card {
+        margin: 0 0.5rem 1.5rem 0.5rem;
+    }
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.d-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#uploadForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}

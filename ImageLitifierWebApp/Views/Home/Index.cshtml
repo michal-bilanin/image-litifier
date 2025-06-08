@@ -2,188 +2,86 @@
     ViewData["Title"] = "Image Litifier - Flame GIF Creator";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h1 class="text-center mb-4">Image Litifier</h1>
-            <p class="text-center text-muted mb-4">Transform your images into flame GIFs</p>
+<link rel="stylesheet" href="~/css/hip-hop-style.css">
 
-            <!-- Upload Form -->
-            <div id="uploadSection" class="card">
-                <div class="card-body">
-                    <form id="uploadForm" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label for="imageFile" class="form-label">Select Image</label>
-                            <input type="file" class="form-control" id="imageFile" name="imageFile"
-                                   accept="image/*" required>
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary" id="uploadBtn">
-                                <span id="uploadBtnText">Upload & Process</span>
-                                <span id="uploadSpinner" class="spinner-border spinner-border-sm ms-2 d-none"></span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div class="hip-hop-container">
+    <!-- Background music -->
+    <audio id="backgroundMusic" loop>
+        <source src="~/audio/background-beat.mp3" type="audio/mpeg">
+    </audio>
 
-            <!-- Processing Status -->
-            <div id="processingSection" class="card mt-4 d-none">
-                <div class="card-body text-center">
-                    <div class="spinner-border text-primary mb-3"></div>
-                    <h5 id="statusMessage">Processing your image...</h5>
-                    <p class="text-muted">This may take a few moments</p>
-                    <div class="progress mt-3">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated"
-                             style="width: 100%"></div>
+    <!-- Sound effects -->
+    <audio id="buttonSound" preload="auto">
+        <source src="~/audio/button-click.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="successSound" preload="auto">
+        <source src="~/audio/success-sound.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h1 class="main-title glow-text">🔥 IMAGE LITIFIER 🔥</h1>
+                <p class="subtitle">TRANSFORM YO' PICS INTO FLAME GIFS</p>
+
+                <!-- Upload Form -->
+                <div id="uploadSection" class="retro-card">
+                    <div class="card-header">
+                        <h3 class="card-title">DROP THAT FIRE 📸</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="imageFile" class="form-label retro-label">SELECT YOUR IMAGE</label>
+                                <input type="file" class="retro-input" id="imageFile" name="imageFile"
+                                       accept="image/*" required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="retro-btn primary-btn" id="uploadBtn">
+                                    <span id="uploadBtnText">🚀 UPLOAD & PROCESS 🚀</span>
+                                    <span id="uploadSpinner" class="spinner-border spinner-border-sm ms-2 d-none"></span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </div>
 
-            <!-- Result Display -->
-            <div id="resultSection" class="card mt-4 d-none">
-                <div class="card-body text-center">
-                    <h5 class="text-success mb-3">🔥 Your Flame GIF is Ready! 🔥</h5>
-                    <div id="resultContainer" class="mb-3">
-                        <!-- Result image will be inserted here -->
+                <!-- Processing Status -->
+                <div id="processingSection" class="retro-card processing-card mt-4" style="display: none;">
+                    <div class="card-body text-center">
+                        <div class="retro-spinner mb-3"></div>
+                        <h5 id="statusMessage" class="status-text">COOKING UP THAT FIRE... 🔥</h5>
+                        <p class="processing-subtitle">HOLD TIGHT, WE'RE MAKING MAGIC</p>
+                        <div class="retro-progress mt-3">
+                            <div class="retro-progress-bar"></div>
+                        </div>
                     </div>
-                    <button class="btn btn-secondary" onclick="resetForm()">Process Another Image</button>
                 </div>
-            </div>
 
-            <!-- Error Display -->
-            <div id="errorSection" class="alert alert-danger mt-4 d-none">
-                <h6>Error</h6>
-                <p id="errorMessage"></p>
-                <button class="btn btn-outline-danger btn-sm" onclick="resetForm()">Try Again</button>
+                <div id="resultSection" class="retro-card success-card mt-4" style="display: none;">
+                    <div class="card-body text-center">
+                        <h5 class="success-title mb-3">🔥 YO' FLAME GIF IS READY! 🔥</h5>
+                        <div id="resultContainer" class="mb-3">
+                            <!-- Result image will be inserted here -->
+                        </div>
+                        <button class="retro-btn secondary-btn" onclick="resetForm()">MAKE ANOTHER BANGER</button>
+                    </div>
+                </div>
+
+                <div id="errorSection" class="retro-card error-card mt-4" style="display: none;">
+                    <div class="card-body">
+                        <h6 class="error-title">SOMETHING WENT WRONG 😤</h6>
+                        <p id="errorMessage" class="error-text"></p>
+                        <button class="retro-btn danger-btn" onclick="resetForm()">TRY AGAIN</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Music control button -->
+    <button id="musicToggle" class="music-toggle">🎵</button>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const uploadForm = document.getElementById('uploadForm');
-        const uploadSection = document.getElementById('uploadSection');
-        const processingSection = document.getElementById('processingSection');
-        const resultSection = document.getElementById('resultSection');
-        const errorSection = document.getElementById('errorSection');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const uploadBtnText = document.getElementById('uploadBtnText');
-        const uploadSpinner = document.getElementById('uploadSpinner');
-        const statusMessage = document.getElementById('statusMessage');
-        const resultContainer = document.getElementById('resultContainer');
-        const errorMessage = document.getElementById('errorMessage');
-
-        let pollingInterval;
-        let currentRequestId;
-
-        uploadForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const fileInput = document.getElementById('imageFile');
-            const file = fileInput.files[0];
-
-            if (!file) {
-                showError('Please select an image file');
-                return;
-            }
-
-            // Show upload loading state
-            uploadBtn.disabled = true;
-            uploadBtnText.textContent = 'Uploading...';
-            uploadSpinner.classList.remove('d-none');
-
-            const formData = new FormData();
-            formData.append('imageFile', file);
-
-            try {
-                const response = await fetch('/Images/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    currentRequestId = result.requestId;
-                    showProcessing();
-                    startPolling(result.requestId);
-                } else {
-                    showError(result.message || 'Upload failed');
-                }
-            } catch (error) {
-                showError('Network error: ' + error.message);
-            } finally {
-                // Reset upload button
-                uploadBtn.disabled = false;
-                uploadBtnText.textContent = 'Upload & Process';
-                uploadSpinner.classList.add('d-none');
-            }
-        });
-
-        function startPolling(requestId) {
-            pollingInterval = setInterval(async () => {
-                try {
-                    const response = await fetch(`/Images/status/${requestId}`);
-                    const status = await response.json();
-
-                    if (response.ok) {
-                        if (status.status === 'Completed') {
-                            clearInterval(pollingInterval);
-                            showResult(status.resultUrl);
-                        } else {
-                            statusMessage.textContent = status.message || 'Processing your image...';
-                        }
-                    } else {
-                        clearInterval(pollingInterval);
-                        showError('Failed to check processing status');
-                    }
-                } catch (error) {
-                    clearInterval(pollingInterval);
-                    showError('Error checking status: ' + error.message);
-                }
-            }, 2000); // Poll every 2 seconds
-        }
-
-        function showProcessing() {
-            hideAllSections();
-            processingSection.classList.remove('d-none');
-        }
-
-        function showResult(imageUrl) {
-            hideAllSections();
-            resultContainer.innerHTML = `
-            <img src="${imageUrl}" class="img-fluid rounded shadow" alt="Processed Flame GIF" style="max-height: 400px;">
-            <div class="mt-3">
-                <a href="${imageUrl}" class="btn btn-success" download>Download GIF</a>
-            </div>
-        `;
-            resultSection.classList.remove('d-none');
-        }
-
-        function showError(message) {
-            hideAllSections();
-            errorMessage.textContent = message;
-            errorSection.classList.remove('d-none');
-            if (pollingInterval) {
-                clearInterval(pollingInterval);
-            }
-        }
-
-        function hideAllSections() {
-            processingSection.classList.add('d-none');
-            resultSection.classList.add('d-none');
-            errorSection.classList.add('d-none');
-        }
-
-        window.resetForm = function() {
-            hideAllSections();
-            uploadForm.reset();
-            if (pollingInterval) {
-                clearInterval(pollingInterval);
-            }
-            currentRequestId = null;
-        };
-    });
-</script>
+<script src="~/js/hip-hop-effects.js"></script>

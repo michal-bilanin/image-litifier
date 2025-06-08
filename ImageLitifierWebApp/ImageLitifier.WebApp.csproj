@@ -17,4 +17,9 @@
     <ProjectReference Include="..\ImageLitifier.Contracts\ImageLitifier.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\audio\" />
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>
