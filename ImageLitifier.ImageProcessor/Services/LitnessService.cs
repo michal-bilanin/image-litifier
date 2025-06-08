@@ -12,10 +12,16 @@ using Microsoft.Extensions.Logging;
 public class LitnessService : IImageProcessingService
 {
     private readonly ILogger<LitnessService> _logger;
+    private readonly HttpClient _httpClient;
 
-    public LitnessService(ILogger<LitnessService> logger)
+    private readonly string _litnessGifUrl = 
+        Environment.GetEnvironmentVariable(Constants.EnvironmentVariables.LitnessServiceImageUrl)
+        ?? throw new InvalidOperationException("LITNESS_GIF_URL environment variable is not set.");
+
+    public LitnessService(ILogger<LitnessService> logger, HttpClient httpClient)
     {
         _logger = logger;
+        _httpClient = httpClient;
     }
 
     public async Task<ErrorOr<byte[]>> ProcessImageAsync(byte[] image)
@@ -59,11 +65,14 @@ public class LitnessService : IImageProcessingService
     private async Task<byte[]> CreateFlameGifAsync(byte[] sourceImageBytes)
     {
         using var sourceImage = Image.Load<Rgba32>(sourceImageBytes);
-        using var flameGif = await Image.LoadAsync<Rgba32>("assets/flame.gif");
         Image<Rgba32> outputGif = null;
 
         try
         {
+            var response = await _httpClient.GetAsync(_litnessGifUrl);
+            var flameGif = Image.Load<Rgba32>(await response.Content.ReadAsByteArrayAsync());
+
+            
             for (int frameIndex = 0; frameIndex < flameGif.Frames.Count; frameIndex++)
             {
                 using var combinedFrame = sourceImage.CloneAs<Rgba32>();

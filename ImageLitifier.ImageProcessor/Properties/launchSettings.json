@@ -9,7 +9,8 @@
         "BLOB_STORAGE_PROCESSED_CONTAINER_NAME": "image-processed",
         "BLOB_STORAGE_REQUESTS_CONTAINER_NAME": "image-requests",
         "SERVICE_BUS_CONNECTION_STRING": "Endpoint=sb://localhost:9350/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=your_shared_access_key",
-        "SERVICE_BUS_QUEUE_NAME": "image-requests"
+        "SERVICE_BUS_QUEUE_NAME": "image-requests",
+        "LITNESS_SERVICE_IMAGE_URL": "https://525277pa200hw3.blob.core.windows.net/images/flame.gif"
       }
     }
   }
