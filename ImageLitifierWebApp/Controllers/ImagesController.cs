@@ -95,6 +95,21 @@ public class ImagesController : ControllerBase
     [Route("status/{requestId}")]
     public async Task<IActionResult> GetStatus(string requestId)
     {
+        var requestImageExistsResponse = await _blobsManagement.FileExists(
+            _imageRequestsContainerName, ProcessedImageFileName(requestId));
+        
+        if (requestImageExistsResponse.IsError)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                "Failed to check request image existence: " + requestImageExistsResponse.FirstError);
+        }
+        
+        if (!requestImageExistsResponse.Value)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                "An error occurred.");
+        }
+
         var processedImageExistsResponse = await _blobsManagement.FileExists(
             _imageProcessedContainerName, ProcessedImageFileName(requestId));
 
